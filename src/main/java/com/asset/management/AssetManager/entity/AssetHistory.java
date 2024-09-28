@@ -24,6 +24,7 @@ public class AssetHistory {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
+    private String action;
     private LocalDateTime assignedDate;
     private LocalDateTime returnedDate;
 }

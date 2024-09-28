@@ -32,10 +32,10 @@ public class AssetReassignmentRequestController {
         return reassignmentRequestService.createReassignmentRequest(request);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<AssetReassignmentRequest> updateReassignmentRequest(
-            @PathVariable Long id, @RequestBody AssetReassignmentRequest requestDetails) {
-        AssetReassignmentRequest updatedRequest = reassignmentRequestService.updateReassignmentRequest(id, requestDetails);
-        return updatedRequest != null ? ResponseEntity.ok(updatedRequest) : ResponseEntity.notFound().build();
+    @PutMapping("/{assetId}/reassign/{newEmployeeId}")
+    public ResponseEntity<String> reassignAsset(@PathVariable Long assetId, @PathVariable Long newEmployeeId) {
+        String result = reassignmentRequestService.reassignAsset(assetId, newEmployeeId);
+        return ResponseEntity.ok(result);
     }
+
 }

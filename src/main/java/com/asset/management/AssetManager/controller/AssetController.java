@@ -37,4 +37,11 @@ public class AssetController {
         Asset updatedAsset = assetService.updateAsset(id, assetDetails);
         return updatedAsset != null ? ResponseEntity.ok(updatedAsset) : ResponseEntity.notFound().build();
     }
+
+    @PutMapping("/{assetId}/assign/{employeeId}")
+    public ResponseEntity<String> assignAssetToEmployee(
+            @PathVariable Long assetId, @PathVariable Long employeeId) {
+        String result = assetService.assignAssetToEmployee(assetId, employeeId);
+        return ResponseEntity.ok(result);
+    }
 }
