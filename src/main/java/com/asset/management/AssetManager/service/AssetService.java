@@ -39,10 +39,13 @@ public class AssetService {
     public Asset updateAsset(Long id, Asset assetDetails) {
         return assetRepository.findById(id)
                 .map(asset -> {
+                    asset.setName(assetDetails.getName());
                     asset.setType(assetDetails.getType());
+                    asset.setSerialNumber(assetDetails.getSerialNumber());
                     asset.setCondition(assetDetails.getCondition());
                     asset.setAssigned(assetDetails.isAssigned());
                     asset.setAssignedTo(assetDetails.getAssignedTo());
+                    asset.setCondition(assetDetails.getCondition());
                     return assetRepository.save(asset);
                 })
                 .orElse(null);
