@@ -1,6 +1,7 @@
 package com.asset.management.AssetManager.controller;
 
 import com.asset.management.AssetManager.entity.Employee;
+import com.asset.management.AssetManager.models.EmployeeDto;
 import com.asset.management.AssetManager.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +17,19 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping
-    public List<Employee> getAllEmployees() {
+    public List<EmployeeDto> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long id) {
         return employeeService.getEmployeeById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Employee createEmployee(@RequestBody Employee employee) {
+    public EmployeeDto createEmployee(@RequestBody EmployeeDto employee) {
         return employeeService.createEmployee(employee);
     }
 }
