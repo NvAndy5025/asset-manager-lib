@@ -3,6 +3,8 @@ package com.asset.management.AssetManager.service;
 import com.asset.management.AssetManager.entity.Asset;
 import com.asset.management.AssetManager.entity.AssetHistory;
 import com.asset.management.AssetManager.entity.Employee;
+import com.asset.management.AssetManager.mapper.AssetMapper;
+import com.asset.management.AssetManager.models.AssetDto;
 import com.asset.management.AssetManager.repository.AssetHistoryRepository;
 import com.asset.management.AssetManager.repository.AssetRepository;
 import com.asset.management.AssetManager.repository.EmployeeRepository;
@@ -11,6 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Service
 public class AssetService {
@@ -24,28 +30,31 @@ public class AssetService {
     @Autowired
     private AssetHistoryRepository assetHistoryRepository;
 
-    public List<Asset> getAllAssets() {
-        return assetRepository.findAll();
+    public List<AssetDto> getAllAssets() {
+        return assetRepository.findAll().stream().map(AssetMapper::toDto).collect(Collectors.toList());
     }
 
-    public Optional<Asset> getAssetById(Long id) {
-        return assetRepository.findById(id);
+    public Optional<AssetDto> getAssetById(Long id) {
+        Asset asset = assetRepository.findById(id).orElse(null);
+        return nonNull(asset) ? Optional.of(AssetMapper.toDto(asset)) : Optional.empty();
     }
 
-    public Asset createAsset(Asset asset) {
-        return assetRepository.save(asset);
+    public AssetDto createAsset(AssetDto asset) {
+        boolean assetExists=false;
+        if (!isNull(asset.getId())) {
+            assetExists = assetRepository.existsById(asset.getId());
+        }
+        if (!assetExists)
+            return AssetMapper.toDto(assetRepository.save(AssetMapper.toEntity(asset)));
+        return null;
     }
 
-    public Asset updateAsset(Long id, Asset assetDetails) {
+    public Asset updateAsset(Long id, AssetDto assetDetails) {
         return assetRepository.findById(id)
                 .map(asset -> {
-                    asset.setName(assetDetails.getName());
                     asset.setType(assetDetails.getType());
-                    asset.setSerialNumber(assetDetails.getSerialNumber());
                     asset.setCondition(assetDetails.getCondition());
                     asset.setAssigned(assetDetails.isAssigned());
-                    asset.setAssignedTo(assetDetails.getAssignedTo());
-                    asset.setCondition(assetDetails.getCondition());
                     return assetRepository.save(asset);
                 })
                 .orElse(null);

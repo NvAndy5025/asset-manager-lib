@@ -1,5 +1,6 @@
 package com.asset.management.AssetManager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,5 +25,6 @@ public class Asset {
 
     @ManyToOne
     @JoinColumn(name = "assigned_to")
+    @JsonIgnore
     private Employee assignedTo;
 }
