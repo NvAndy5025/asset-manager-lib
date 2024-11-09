@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/assets")
+@CrossOrigin
 public class AssetController {
 
     @Autowired
@@ -28,7 +29,7 @@ public class AssetController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping()
     public AssetDto createAsset(@RequestBody AssetDto asset) {
         return assetService.createAsset(asset);
     }
@@ -44,5 +45,11 @@ public class AssetController {
             @PathVariable Long assetId, @PathVariable Long employeeId) {
         String result = assetService.assignAssetToEmployee(assetId, employeeId);
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/getByAssignations")
+    public ResponseEntity<List<Long>> getAssetsByAssignations(@RequestParam boolean isAssigned){
+        List<Long> assetsIds = assetService.findByIsAssigned(isAssigned);
+        return ResponseEntity.ok(assetsIds);
     }
 }

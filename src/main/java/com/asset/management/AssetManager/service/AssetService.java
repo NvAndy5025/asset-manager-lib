@@ -88,4 +88,8 @@ public class AssetService {
             return "Asset or Employee not found!";
         }
     }
+
+    public List<Long> findByIsAssigned(boolean isAssigned){
+        return  assetRepository.findByIsAssigned(isAssigned).stream().map(Asset::getId).collect(Collectors.toList());
+    }
 }
